@@ -10,7 +10,7 @@ CREATE TABLE banks (
     email VARCHAR(100),
     website VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (country_id) REFERENCES country(id)
 );
 
@@ -24,7 +24,7 @@ CREATE TABLE bank_accounts (
     owner_type VARCHAR(10) CHECK (owner_type IN ('Entity', 'Partner')),
     owner_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (bank_id) REFERENCES banks(bank_id),
     CONSTRAINT fk_entity FOREIGN KEY (owner_id) REFERENCES entities(entity_id),
     CONSTRAINT fk_partner FOREIGN KEY (owner_id) REFERENCES partner(id)
@@ -37,7 +37,7 @@ CREATE TABLE exchange_rate (
     rate DECIMAL(15, 6) NOT NULL,
     effective_date DATE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (base_currency_id) REFERENCES currency(id),
     FOREIGN KEY (target_currency_id) REFERENCES currency(id)
 );

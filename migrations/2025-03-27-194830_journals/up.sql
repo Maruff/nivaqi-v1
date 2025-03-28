@@ -4,7 +4,7 @@ CREATE TABLE journal_type (
   name VARCHAR(100) NOT NULL,
   description TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now()
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE journals (
@@ -17,7 +17,7 @@ CREATE TABLE journals (
   total DECIMAL(15, 2) DEFAULT 0.00,
   status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Post')) DEFAULT 'Draft',
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),  
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),  
   FOREIGN KEY (journal_type_id) REFERENCES journal_type(id)
 );
 
@@ -32,7 +32,7 @@ CREATE TABLE journal_entry (
   currency_code VARCHAR(10) DEFAULT 'INR',
   reconciliation_date DATE DEFAULT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (journal_id) REFERENCES journals(id),
   FOREIGN KEY (ledger_id) REFERENCES coa(ledger_id),
   FOREIGN KEY (partner_id) REFERENCES partner(id)
@@ -44,7 +44,7 @@ CREATE TABLE reconciliation (
     reconciliation_date DATE NOT NULL,
     reconciled BOOLEAN NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id)
 );
 

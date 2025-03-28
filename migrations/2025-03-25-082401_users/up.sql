@@ -6,7 +6,7 @@ CREATE TABLE roles (
     name VARCHAR UNIQUE NOT NULL,
     description VARCHAR,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now()
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE users (
@@ -16,7 +16,7 @@ CREATE TABLE users (
     password VARCHAR NOT NULL,
     role_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 

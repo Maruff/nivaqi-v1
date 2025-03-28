@@ -5,7 +5,7 @@ CREATE TABLE country (
     name VARCHAR(100) NOT NULL UNIQUE,
     code VARCHAR(10) NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now()
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE state (
@@ -14,7 +14,7 @@ CREATE TABLE state (
     code VARCHAR(10) NOT NULL,
     country_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (country_id) REFERENCES country(id) ON DELETE CASCADE
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE city (
     name VARCHAR(100) NOT NULL,
     state_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (state_id) REFERENCES state(id) ON DELETE CASCADE
 );
 

@@ -11,8 +11,8 @@ diesel::table! {
         #[max_length = 10]
         postal_code -> Varchar,
         country -> Int4,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -21,8 +21,8 @@ diesel::table! {
         id -> Int4,
         #[max_length = 100]
         name -> Varchar,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -40,8 +40,8 @@ diesel::table! {
         #[max_length = 10]
         owner_type -> Nullable<Varchar>,
         owner_id -> Int4,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -60,8 +60,8 @@ diesel::table! {
         email -> Nullable<Varchar>,
         #[max_length = 100]
         website -> Nullable<Varchar>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -71,8 +71,8 @@ diesel::table! {
         #[max_length = 100]
         name -> Varchar,
         state_id -> Int4,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -132,8 +132,8 @@ diesel::table! {
         name -> Varchar,
         #[max_length = 10]
         code -> Varchar,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -148,8 +148,8 @@ diesel::table! {
         symbol -> Varchar,
         rounding_factor -> Numeric,
         decimal_places -> Nullable<Int4>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -179,8 +179,8 @@ diesel::table! {
         target_currency_id -> Int4,
         rate -> Numeric,
         effective_date -> Date,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -209,8 +209,8 @@ diesel::table! {
         #[max_length = 10]
         currency_code -> Nullable<Varchar>,
         reconciliation_date -> Nullable<Date>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -220,8 +220,8 @@ diesel::table! {
         #[max_length = 100]
         name -> Varchar,
         description -> Nullable<Text>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -238,8 +238,8 @@ diesel::table! {
         total -> Nullable<Numeric>,
         #[max_length = 50]
         status -> Nullable<Varchar>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -258,8 +258,8 @@ diesel::table! {
         payable_id -> Nullable<Int4>,
         revenue_id -> Nullable<Int4>,
         expense_id -> Nullable<Int4>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -269,8 +269,8 @@ diesel::table! {
         journal_entry_id -> Int4,
         reconciliation_date -> Date,
         reconciled -> Bool,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -279,6 +279,8 @@ diesel::table! {
         id -> Int4,
         name -> Varchar,
         description -> Nullable<Varchar>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -290,8 +292,60 @@ diesel::table! {
         #[max_length = 10]
         code -> Varchar,
         country_id -> Int4,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    tax_category (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        account_id -> Int4,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    tax_code_rates (id) {
+        id -> Int4,
+        tax_code_id -> Int4,
+        tax_rate_id -> Int4,
+        effective_from -> Date,
+        effective_to -> Nullable<Date>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    tax_codes (id) {
+        id -> Int4,
+        tax_category_id -> Int4,
+        #[max_length = 50]
+        code -> Varchar,
+        description -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    tax_rates (id) {
+        id -> Int4,
+        tax_category_id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        rate -> Numeric,
+        effective_from -> Date,
+        effective_to -> Nullable<Date>,
+        account_id -> Nullable<Int4>,
+        description -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -327,6 +381,12 @@ diesel::joinable!(journal_entry -> partner (partner_id));
 diesel::joinable!(journals -> journal_type (journal_type_id));
 diesel::joinable!(reconciliation -> journal_entry (journal_entry_id));
 diesel::joinable!(state -> country (country_id));
+diesel::joinable!(tax_category -> coa (account_id));
+diesel::joinable!(tax_code_rates -> tax_codes (tax_code_id));
+diesel::joinable!(tax_code_rates -> tax_rates (tax_rate_id));
+diesel::joinable!(tax_codes -> tax_category (tax_category_id));
+diesel::joinable!(tax_rates -> coa (account_id));
+diesel::joinable!(tax_rates -> tax_category (tax_category_id));
 diesel::joinable!(users -> roles (role_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
@@ -350,5 +410,9 @@ diesel::allow_tables_to_appear_in_same_query!(
     reconciliation,
     roles,
     state,
+    tax_category,
+    tax_code_rates,
+    tax_codes,
+    tax_rates,
     users,
 );

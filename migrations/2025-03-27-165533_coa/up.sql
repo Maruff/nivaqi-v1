@@ -6,7 +6,7 @@ CREATE TABLE coa_template_master (
     industry_type VARCHAR(50) CHECK (industry_type IN ('Manufacturing', 'Trading', 'Service', 'Non-Profit')),
     country_code VARCHAR(10) DEFAULT 'IN',
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now()
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE coa_template (
@@ -18,7 +18,7 @@ CREATE TABLE coa_template (
     parent_account_id INT,
     is_posting BOOLEAN NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (template_id) REFERENCES coa_template_master(template_id),
     FOREIGN KEY (parent_account_id) REFERENCES coa_template(account_id)
 );
@@ -32,7 +32,7 @@ CREATE TABLE currency (
   rounding_factor DECIMAL(15, 6) NOT NULL,
   decimal_places INT, 
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 
@@ -45,7 +45,7 @@ CREATE TABLE entities (
     country_code VARCHAR(10) DEFAULT 'IN',
     currency_code VARCHAR(10) DEFAULT 'INR',
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (parent_entity_id) REFERENCES entities(entity_id),
     FOREIGN KEY (currency_code) REFERENCES currency(code)
 );
@@ -57,7 +57,7 @@ CREATE TABLE financial_year (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
     UNIQUE (entity_id, start_date, end_date)
 );
@@ -72,7 +72,7 @@ CREATE TABLE coa (
     opening_balance DECIMAL(15, 2) DEFAULT 0.00,
     closing_balance DECIMAL(15, 2) DEFAULT 0.00,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (financial_year_id) REFERENCES financial_year(id),
     FOREIGN KEY (account_id) REFERENCES coa_template(account_id),
     FOREIGN KEY (currency_code) REFERENCES currency(code)

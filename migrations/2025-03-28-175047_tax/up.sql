@@ -5,7 +5,7 @@ CREATE TABLE tax_category (
     description TEXT,
     account_id INT NOT NULL, -- Account to which this tax category is linked
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (account_id) REFERENCES coa(ledger_id) ON DELETE CASCADE
 );
 
@@ -19,7 +19,7 @@ CREATE TABLE tax_rates (
     account_id INT, -- Account to which this tax rate is linked
     description TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (tax_category_id) REFERENCES tax_category(id) ON DELETE CASCADE,
     FOREIGN KEY (account_id) REFERENCES coa(ledger_id) ON DELETE CASCADE
 );
@@ -30,7 +30,7 @@ CREATE TABLE tax_codes (
     code VARCHAR(50) NOT NULL UNIQUE, -- e.g., HSN Code, SAC Code
     description TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (tax_category_id) REFERENCES tax_category(id) ON DELETE CASCADE
 );
 
@@ -41,7 +41,7 @@ CREATE TABLE tax_code_rates (
     effective_from DATE NOT NULL,
     effective_to DATE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (tax_code_id) REFERENCES tax_codes(id) ON DELETE CASCADE,
     FOREIGN KEY (tax_rate_id) REFERENCES tax_rates(id) ON DELETE CASCADE
 );
