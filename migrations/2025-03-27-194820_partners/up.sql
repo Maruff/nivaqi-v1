@@ -1,4 +1,5 @@
--- Your SQL goes here
+-- Your SQL goes here 194936_partners up.sql
+
 CREATE TABLE partner (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,

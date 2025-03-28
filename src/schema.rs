@@ -1,6 +1,43 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    address (id) {
+        id -> Int4,
+        partner_id -> Int4,
+        address_type_id -> Int4,
+        street_address -> Nullable<Text>,
+        city -> Nullable<Int4>,
+        state -> Nullable<Int4>,
+        #[max_length = 10]
+        postal_code -> Varchar,
+        country -> Int4,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    address_type (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    city (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        state_id -> Int4,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     coa (ledger_id) {
         ledger_id -> Int4,
         financial_year_id -> Int4,
@@ -50,6 +87,18 @@ diesel::table! {
 }
 
 diesel::table! {
+    country (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        #[max_length = 10]
+        code -> Varchar,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     currency (id) {
         id -> Int4,
         #[max_length = 5]
@@ -85,6 +134,18 @@ diesel::table! {
 }
 
 diesel::table! {
+    exchange_rate (id) {
+        id -> Int4,
+        base_currency_id -> Int4,
+        target_currency_id -> Int4,
+        rate -> Numeric,
+        effective_date -> Date,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     financial_year (id) {
         id -> Int4,
         #[max_length = 20]
@@ -98,10 +159,100 @@ diesel::table! {
 }
 
 diesel::table! {
+    journal_entry (id) {
+        id -> Int4,
+        journal_id -> Int4,
+        ledger_id -> Int4,
+        partner_id -> Nullable<Int4>,
+        description -> Nullable<Text>,
+        debit -> Nullable<Numeric>,
+        credit -> Nullable<Numeric>,
+        #[max_length = 10]
+        currency_code -> Nullable<Varchar>,
+        reconciliation_date -> Nullable<Date>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    journal_type (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    journals (id) {
+        id -> Int4,
+        #[max_length = 50]
+        voucher_id -> Varchar,
+        note -> Nullable<Text>,
+        journal_type_id -> Int4,
+        #[max_length = 255]
+        journal_reference -> Nullable<Varchar>,
+        journal_date -> Date,
+        total -> Nullable<Numeric>,
+        #[max_length = 50]
+        status -> Nullable<Varchar>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    partner (id) {
+        id -> Int4,
+        #[max_length = 255]
+        name -> Varchar,
+        partner_type -> Text,
+        #[max_length = 20]
+        gst_number -> Nullable<Varchar>,
+        #[max_length = 10]
+        pan_number -> Nullable<Varchar>,
+        contact_info -> Nullable<Text>,
+        receivable_id -> Nullable<Int4>,
+        payable_id -> Nullable<Int4>,
+        revenue_id -> Nullable<Int4>,
+        expense_id -> Nullable<Int4>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    reconciliation (id) {
+        id -> Int4,
+        journal_entry_id -> Int4,
+        reconciliation_date -> Date,
+        reconciled -> Bool,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     roles (id) {
         id -> Int4,
         name -> Varchar,
         description -> Nullable<Varchar>,
+    }
+}
+
+diesel::table! {
+    state (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        #[max_length = 10]
+        code -> Varchar,
+        country_id -> Int4,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
     }
 }
 
@@ -117,19 +268,42 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(address -> address_type (address_type_id));
+diesel::joinable!(address -> city (city));
+diesel::joinable!(address -> country (country));
+diesel::joinable!(address -> partner (partner_id));
+diesel::joinable!(address -> state (state));
+diesel::joinable!(city -> state (state_id));
 diesel::joinable!(coa -> coa_template (account_id));
 diesel::joinable!(coa -> financial_year (financial_year_id));
 diesel::joinable!(coa_template -> coa_template_master (template_id));
 diesel::joinable!(financial_year -> entities (entity_id));
+diesel::joinable!(journal_entry -> coa (ledger_id));
+diesel::joinable!(journal_entry -> journals (journal_id));
+diesel::joinable!(journal_entry -> partner (partner_id));
+diesel::joinable!(journals -> journal_type (journal_type_id));
+diesel::joinable!(reconciliation -> journal_entry (journal_entry_id));
+diesel::joinable!(state -> country (country_id));
 diesel::joinable!(users -> roles (role_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    address,
+    address_type,
+    city,
     coa,
     coa_template,
     coa_template_master,
+    country,
     currency,
     entities,
+    exchange_rate,
     financial_year,
+    journal_entry,
+    journal_type,
+    journals,
+    partner,
+    reconciliation,
     roles,
+    state,
     users,
 );

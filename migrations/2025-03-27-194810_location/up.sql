@@ -1,4 +1,4 @@
--- Your SQL goes here
+-- Your SQL goes here 2025-03-27-203600_location
 -- Create country, state, and city table
 CREATE TABLE country (
     id SERIAL PRIMARY KEY,
@@ -298,7 +298,7 @@ INSERT INTO state (name, code, country_id) VALUES
     ('Constantine', '25', 3),
     ('Médéa', '26', 3),
     ('Mostaganem', '27', 3),
-    ('M\'Sila', '28', 3),
+    ('MSila', '28', 3),
     ('Mascara', '29', 3),
     ('Ouargla', '30', 3),
     ('Oran', '31', 3),
@@ -455,7 +455,7 @@ INSERT INTO state (name, code, country_id) VALUES
     ('Nouvelle-Aquitaine', 'NAQ', 60),
     ('Occitanie', 'OCC', 60),
     ('Pays de la Loire', 'PDL', 60),
-    ('Provence-Alpes-Côte d\'Azur', 'PAC', 60),
+    ('Provence-Alpes-Côte d-Azur', 'PAC', 60),
     ('Overseas', 'OMR', 60),
     ('Baden-Württemberg', 'BW', 64),
     ('Bavaria', 'BY', 64),
