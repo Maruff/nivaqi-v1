@@ -3,8 +3,8 @@ CREATE TABLE journal_type (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   description TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now()
 );
 
 CREATE TABLE journals (
@@ -16,8 +16,8 @@ CREATE TABLE journals (
   Journal_date DATE NOT NULL,
   total DECIMAL(15, 2) DEFAULT 0.00,
   status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Post')) DEFAULT 'Draft',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),  
   FOREIGN KEY (journal_type_id) REFERENCES journal_type(id)
 );
 
@@ -31,8 +31,8 @@ CREATE TABLE journal_entry (
   credit DECIMAL(15, 2) DEFAULT 0.00,
   currency_code VARCHAR(10) DEFAULT 'INR',
   reconciliation_date DATE DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
   FOREIGN KEY (journal_id) REFERENCES journals(id),
   FOREIGN KEY (ledger_id) REFERENCES coa(ledger_id),
   FOREIGN KEY (partner_id) REFERENCES partner(id)
@@ -43,21 +43,9 @@ CREATE TABLE reconciliation (
     journal_entry_id INT NOT NULL,
     reconciliation_date DATE NOT NULL,
     reconciled BOOLEAN NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
     FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id)
-);
-
-CREATE TABLE exchange_rate (
-  id SERIAL PRIMARY KEY,
-  base_currency_id INT NOT NULL,
-  target_currency_id INT NOT NULL,
-  rate DECIMAL(15, 6) NOT NULL,
-  effective_date DATE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (base_currency_id) REFERENCES currency(id),
-  FOREIGN KEY (target_currency_id) REFERENCES currency(id)
 );
 
 -- Data for Journal Type - Sales Invoice, Purchase Bill, Payment, Receipt, Contra, Journal, Credit Note, Debit Note, Opening Balance, Expense, Other Income, Adjustment, Transfer

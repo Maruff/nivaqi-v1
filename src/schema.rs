@@ -27,6 +27,45 @@ diesel::table! {
 }
 
 diesel::table! {
+    bank_accounts (account_id) {
+        account_id -> Int4,
+        #[max_length = 50]
+        account_number -> Varchar,
+        bank_id -> Int4,
+        #[max_length = 50]
+        account_type -> Nullable<Varchar>,
+        balance -> Nullable<Numeric>,
+        #[max_length = 10]
+        currency -> Nullable<Varchar>,
+        #[max_length = 10]
+        owner_type -> Nullable<Varchar>,
+        owner_id -> Int4,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    banks (bank_id) {
+        bank_id -> Int4,
+        #[max_length = 100]
+        bank_name -> Varchar,
+        #[max_length = 20]
+        bank_code -> Varchar,
+        address -> Nullable<Text>,
+        country_id -> Nullable<Int4>,
+        #[max_length = 15]
+        phone_number -> Nullable<Varchar>,
+        #[max_length = 100]
+        email -> Nullable<Varchar>,
+        #[max_length = 100]
+        website -> Nullable<Varchar>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     city (id) {
         id -> Int4,
         #[max_length = 100]
@@ -273,6 +312,10 @@ diesel::joinable!(address -> city (city));
 diesel::joinable!(address -> country (country));
 diesel::joinable!(address -> partner (partner_id));
 diesel::joinable!(address -> state (state));
+diesel::joinable!(bank_accounts -> banks (bank_id));
+diesel::joinable!(bank_accounts -> entities (owner_id));
+diesel::joinable!(bank_accounts -> partner (owner_id));
+diesel::joinable!(banks -> country (country_id));
 diesel::joinable!(city -> state (state_id));
 diesel::joinable!(coa -> coa_template (account_id));
 diesel::joinable!(coa -> financial_year (financial_year_id));
@@ -289,6 +332,8 @@ diesel::joinable!(users -> roles (role_id));
 diesel::allow_tables_to_appear_in_same_query!(
     address,
     address_type,
+    bank_accounts,
+    banks,
     city,
     coa,
     coa_template,

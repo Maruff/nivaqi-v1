@@ -1,3 +1,3 @@
 -- This file should undo anything in `up.sql`
-DROP TABLE users;
-DROP TABLE roles;
+DROP TABLE  IF EXISTS users;
+DROP TABLE  IF EXISTS roles;
