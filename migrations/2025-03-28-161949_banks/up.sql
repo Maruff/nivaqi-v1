@@ -26,7 +26,7 @@ CREATE TABLE bank_accounts (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (bank_id) REFERENCES banks(bank_id),
-    CONSTRAINT fk_entity FOREIGN KEY (owner_id) REFERENCES entities(entity_id),
+    CONSTRAINT fk_entity FOREIGN KEY (owner_id) REFERENCES entities(id),
     CONSTRAINT fk_partner FOREIGN KEY (owner_id) REFERENCES partner(id)
 );
 

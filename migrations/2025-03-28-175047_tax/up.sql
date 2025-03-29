@@ -63,7 +63,7 @@ VALUES
 -- Data for Indian tax rates
 INSERT INTO tax_rates (tax_category_id, name, rate, effective_from, description)
 VALUES
-       -- SGST Rates
+    -- SGST Rates
     (1, 'SGST 2.5%', 2.50, '2025-04-01', 'State GST rate for essential goods and services'),
     (1, 'SGST 6%', 6.00, '2025-04-01', 'State GST rate for standard goods and services'),
     (1, 'SGST 9%', 9.00, '2025-04-01', 'State GST rate for most goods and services'),
@@ -85,11 +85,9 @@ VALUES
     (2, 'Income Tax Slab 3', 20.00, '2025-04-01', 'Income tax for income between ₹5 lakh and ₹10 lakh'),
     (2, 'Income Tax Slab 4', 30.00, '2025-04-01', 'Income tax for income above ₹10 lakh'),
 
-
     -- Customs Duty Rates
     (3, 'Customs Duty 10%', 10.00, '2025-04-01', 'Customs duty on imported goods'),
     (3, 'Customs Duty 20%', 20.00, '2025-04-01', 'Customs duty on luxury imported goods'),
-
 
     -- Excise Duty Rates
     (4, 'Excise Duty 12%', 12.00, '2025-04-01', 'Excise duty on manufactured goods'),
@@ -111,3 +109,18 @@ VALUES
 
     -- Road Tax Rates
     (10, 'Road Tax 8%', 8.00, '2025-04-01', 'Road tax on vehicle registration');
+
+-- Data for Indian tax codes
+INSERT INTO tax_codes (tax_category_id, code, description)
+VALUES
+    (1, 'HSN 1234', 'Harmonized System of Nomenclature for goods'),
+    (2, 'SAC 5678', 'Service Accounting Code for services'),
+    (3, 'HSN 9101', 'Harmonized System of Nomenclature for imported goods'),
+    (4, 'SAC 1122', 'Service Accounting Code for excise duty'),
+    (5, 'HSN 3344', 'Harmonized System of Nomenclature for professional services'),
+    (6, 'SAC 5566', 'Service Accounting Code for stamp duty'),
+    (7, 'HSN 7788', 'Harmonized System of Nomenclature for property tax'),
+    (8, 'SAC 9900', 'Service Accounting Code for entertainment tax'),
+    (9, 'HSN 2233', 'Harmonized System of Nomenclature for luxury tax'),
+    (10, 'SAC 4455', 'Service Accounting Code for road tax');
+

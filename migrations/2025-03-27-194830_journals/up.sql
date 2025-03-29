@@ -10,6 +10,7 @@ CREATE TABLE journal_type (
 CREATE TABLE journals (
   id SERIAL PRIMARY KEY,
   voucher_id VARCHAR(50) UNIQUE NOT NULL,
+  partner_id INT DEFAULT NULL,
   note TEXT,
   journal_type_id INT NOT NULL,
   journal_reference VARCHAR(255) DEFAULT NULL,
@@ -18,7 +19,9 @@ CREATE TABLE journals (
   status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Post')) DEFAULT 'Draft',
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),  
-  FOREIGN KEY (journal_type_id) REFERENCES journal_type(id)
+  FOREIGN KEY (journal_type_id) REFERENCES journal_type(id) ON DELETE CASCADE,
+  FOREIGN KEY (partner_id) REFERENCES partner(id) ON DELETE SET NULL,
+  UNIQUE (journal_type_id, journal_reference)
 );
 
 CREATE TABLE journal_entry (

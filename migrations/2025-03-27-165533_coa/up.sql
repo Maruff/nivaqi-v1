@@ -31,22 +31,26 @@ CREATE TABLE currency (
   symbol VARCHAR(5)  NOT NULL,
   rounding_factor DECIMAL(15, 6) NOT NULL,
   decimal_places INT, 
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 
 CREATE TABLE entities (
-    entity_id SERIAL PRIMARY KEY,
-    entity_name VARCHAR(255) NOT NULL,
-    parent_entity_id INT,
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    parent_id INT,
     entity_type VARCHAR(50) CHECK (entity_type IN ('Company', 'Subsidiary', 'Branch', 'Franchise', 'Group')),
     industry_type VARCHAR(50) CHECK (industry_type IN ('Manufacturing', 'Trading', 'Service', 'Non-Profit')),
-    country_code VARCHAR(10) DEFAULT 'IN',
+    address TEXT,
+    city_id INT,
     currency_code VARCHAR(10) DEFAULT 'INR',
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (parent_entity_id) REFERENCES entities(entity_id),
+    FOREIGN KEY (parent_id) REFERENCES entities(id),
+    FOREIGN KEY (city_id) REFERENCES city(id),
+    UNIQUE (name, parent_id),
     FOREIGN KEY (currency_code) REFERENCES currency(code)
 );
 
@@ -58,7 +62,7 @@ CREATE TABLE financial_year (
     end_date DATE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
+    FOREIGN KEY (entity_id) REFERENCES entities(id),
     UNIQUE (entity_id, start_date, end_date)
 );
 
@@ -213,9 +217,9 @@ INSERT INTO coa_template (template_id, account_name, account_code, account_type,
 (3, 'Utilities', '7600', 'Expense', TRUE);
 
 -- Sample for entity with 2 financial years
-INSERT INTO entities (entity_name, entity_type, industry_type, country_code, currency_code) VALUES
-('Nivaqi Technologies', 'Company', 'Service', 'IN', 'INR'),
-('Nivaqi Technologies Qatar', 'Company', 'Service', 'QA', 'QAR');
+INSERT INTO entities (name, entity_type, industry_type, currency_code) VALUES
+('Nivaqi Technologies', 'Company', 'Service', 'INR'),
+('Nivaqi Technologies Qatar', 'Company', 'Service', 'QAR');
 
 INSERT INTO financial_year (code, entity_id, start_date, end_date) VALUES
 ('FY24NI', 1, '2024-04-01', '2025-03-31'),
