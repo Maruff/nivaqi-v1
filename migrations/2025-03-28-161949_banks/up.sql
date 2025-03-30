@@ -15,8 +15,8 @@ CREATE TABLE banks (
 );
 
 CREATE TABLE bank_accounts (
-    account_id SERIAL PRIMARY KEY,
-    account_number VARCHAR(50) UNIQUE NOT NULL,
+    id SERIAL PRIMARY KEY,
+    number VARCHAR(50) UNIQUE NOT NULL,
     bank_id INT NOT NULL,
     account_type VARCHAR(50),
     balance DECIMAL(15, 2) DEFAULT 0.00,

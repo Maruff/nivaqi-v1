@@ -25,10 +25,10 @@ diesel::table! {
 }
 
 diesel::table! {
-    bank_accounts (account_id) {
-        account_id -> Int4,
+    bank_accounts (id) {
+        id -> Int4,
         #[max_length = 50]
-        account_number -> Varchar,
+        number -> Varchar,
         bank_id -> Int4,
         #[max_length = 50]
         account_type -> Nullable<Varchar>,
@@ -277,6 +277,56 @@ diesel::table! {
         maximum_level -> Nullable<Numeric>,
         reorder_quantity -> Nullable<Numeric>,
         stock_owner_id -> Nullable<Int4>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    invoice (id) {
+        id -> Int4,
+        #[max_length = 50]
+        invoice_number -> Varchar,
+        order_id -> Int4,
+        journal_id -> Int4,
+        customer_id -> Int4,
+        invoice_date -> Timestamp,
+        due_date -> Timestamp,
+        total_amount -> Nullable<Numeric>,
+        #[max_length = 50]
+        status -> Nullable<Varchar>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    invoice_item (id) {
+        id -> Int4,
+        invoice_id -> Int4,
+        journal_entry_id -> Int4,
+        product_variant_id -> Int4,
+        quantity -> Numeric,
+        unit_price -> Numeric,
+        discount -> Nullable<Numeric>,
+        total_price -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    invoice_payment (id) {
+        id -> Int4,
+        invoice_id -> Int4,
+        journal_id -> Int4,
+        #[max_length = 50]
+        payment_method -> Nullable<Varchar>,
+        #[max_length = 50]
+        payment_reference -> Varchar,
+        bank_account_id -> Int4,
+        payment_date -> Timestamp,
+        amount -> Numeric,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -708,6 +758,15 @@ diesel::joinable!(financial_year -> entities (entity_id));
 diesel::joinable!(inventory -> location (location_id));
 diesel::joinable!(inventory -> partner (stock_owner_id));
 diesel::joinable!(inventory -> product_variant (product_variant_id));
+diesel::joinable!(invoice -> journals (journal_id));
+diesel::joinable!(invoice -> partner (customer_id));
+diesel::joinable!(invoice -> sales_order (order_id));
+diesel::joinable!(invoice_item -> invoice (invoice_id));
+diesel::joinable!(invoice_item -> journal_entry (journal_entry_id));
+diesel::joinable!(invoice_item -> product_variant (product_variant_id));
+diesel::joinable!(invoice_payment -> bank_accounts (bank_account_id));
+diesel::joinable!(invoice_payment -> invoice (invoice_id));
+diesel::joinable!(invoice_payment -> journals (journal_id));
 diesel::joinable!(journal_entry -> coa (ledger_id));
 diesel::joinable!(journal_entry -> journals (journal_id));
 diesel::joinable!(journal_entry -> partner (partner_id));
@@ -767,6 +826,9 @@ diesel::allow_tables_to_appear_in_same_query!(
     exchange_rate,
     financial_year,
     inventory,
+    invoice,
+    invoice_item,
+    invoice_payment,
     journal_entry,
     journal_type,
     journals,
