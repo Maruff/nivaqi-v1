@@ -352,6 +352,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    order_receipt (id) {
+        id -> Int4,
+        purchase_order_item_id -> Int4,
+        dispatch_detail_id -> Int4,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     partner (id) {
         id -> Int4,
         #[max_length = 255]
@@ -379,6 +389,7 @@ diesel::table! {
         description -> Nullable<Text>,
         #[max_length = 10]
         currency -> Varchar,
+        status -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -390,6 +401,7 @@ diesel::table! {
         price_list_id -> Int4,
         product_variant_id -> Int4,
         price -> Numeric,
+        moq -> Nullable<Numeric>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -439,6 +451,37 @@ diesel::table! {
         width -> Nullable<Numeric>,
         height -> Nullable<Numeric>,
         volume -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    purchase_order (id) {
+        id -> Int4,
+        #[max_length = 50]
+        order_number -> Varchar,
+        vendor_id -> Int4,
+        order_date -> Timestamp,
+        #[max_length = 50]
+        status -> Nullable<Varchar>,
+        total_amount -> Nullable<Numeric>,
+        discount -> Nullable<Numeric>,
+        net_amount -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    purchase_order_item (id) {
+        id -> Int4,
+        purchase_order_id -> Int4,
+        product_variant_id -> Int4,
+        quantity -> Numeric,
+        unit_price -> Numeric,
+        discount -> Nullable<Numeric>,
+        total_price -> Nullable<Numeric>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -588,6 +631,48 @@ diesel::table! {
 }
 
 diesel::table! {
+    vendor_category (id) {
+        id -> Int4,
+        #[max_length = 255]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        discount_rate -> Nullable<Numeric>,
+        credit_limit -> Nullable<Numeric>,
+        credit_period -> Nullable<Int4>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    vendor_price_list (id) {
+        id -> Int4,
+        #[max_length = 255]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        #[max_length = 10]
+        currency -> Varchar,
+        vendor_id -> Int4,
+        status -> Nullable<Bool>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    vendor_price_list_item (id) {
+        id -> Int4,
+        price_list_id -> Int4,
+        product_variant_id -> Int4,
+        price -> Numeric,
+        discount_rate -> Nullable<Numeric>,
+        moq -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     warehouse (id) {
         id -> Int4,
         #[max_length = 255]
@@ -631,6 +716,8 @@ diesel::joinable!(journals -> partner (partner_id));
 diesel::joinable!(location -> warehouse (warehouse_id));
 diesel::joinable!(order_delivery -> dispatch_detail (dispatch_detail_id));
 diesel::joinable!(order_delivery -> sales_order_item (sales_order_item_id));
+diesel::joinable!(order_receipt -> dispatch_detail (dispatch_detail_id));
+diesel::joinable!(order_receipt -> purchase_order_item (purchase_order_item_id));
 diesel::joinable!(price_list_item -> price_list (price_list_id));
 diesel::joinable!(price_list_item -> product_variant (product_variant_id));
 diesel::joinable!(product -> product_category (category_id));
@@ -638,6 +725,9 @@ diesel::joinable!(product -> uom (uom_id));
 diesel::joinable!(product_variant -> brand (brand_id));
 diesel::joinable!(product_variant -> product (product_id));
 diesel::joinable!(product_variant -> uom (uom_id));
+diesel::joinable!(purchase_order -> partner (vendor_id));
+diesel::joinable!(purchase_order_item -> product_variant (product_variant_id));
+diesel::joinable!(purchase_order_item -> purchase_order (purchase_order_id));
 diesel::joinable!(reconciliation -> journal_entry (journal_entry_id));
 diesel::joinable!(sales_order -> partner (customer_id));
 diesel::joinable!(sales_order_item -> product_variant (product_variant_id));
@@ -650,6 +740,9 @@ diesel::joinable!(tax_codes -> tax_category (tax_category_id));
 diesel::joinable!(tax_rates -> coa (account_id));
 diesel::joinable!(tax_rates -> tax_category (tax_category_id));
 diesel::joinable!(users -> roles (role_id));
+diesel::joinable!(vendor_price_list -> partner (vendor_id));
+diesel::joinable!(vendor_price_list_item -> product_variant (product_variant_id));
+diesel::joinable!(vendor_price_list_item -> vendor_price_list (price_list_id));
 diesel::joinable!(warehouse -> city (city_id));
 diesel::joinable!(warehouse -> entities (entity_id));
 diesel::joinable!(warehouse -> partner (manager_id));
@@ -679,12 +772,15 @@ diesel::allow_tables_to_appear_in_same_query!(
     journals,
     location,
     order_delivery,
+    order_receipt,
     partner,
     price_list,
     price_list_item,
     product,
     product_category,
     product_variant,
+    purchase_order,
+    purchase_order_item,
     reconciliation,
     roles,
     sales_order,
@@ -696,5 +792,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     tax_rates,
     uom,
     users,
+    vendor_category,
+    vendor_price_list,
+    vendor_price_list_item,
     warehouse,
 );
