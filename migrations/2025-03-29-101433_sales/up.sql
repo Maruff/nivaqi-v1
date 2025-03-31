@@ -37,20 +37,25 @@ CREATE TABLE sales_order (
     id SERIAL PRIMARY KEY,
     order_number VARCHAR(50) UNIQUE NOT NULL, -- Unique identifier for the sales order
     customer_id INT NOT NULL, -- Customer ID for the sales order
+    custome_reference VARCHAR(50), -- Customer reference number
+    customer_details JSONB, -- Customer details in JSON format
     order_date TIMESTAMP NOT NULL DEFAULT NOW(), -- Date of the order
-    status VARCHAR(50) CHECK (status IN ('Draft','Enquiry', 'Quotation', 'Order', 'Shipped', 'Delivered')) DEFAULT 'Draft',
+    status VARCHAR(50) CHECK (status IN ('Draft','Enquiry', 'Quotation', 'Order', 'Shipped', 'Delivered', 'Cancelled')) DEFAULT 'Draft',
     total_amount DECIMAL(10, 2) DEFAULT 0.0, -- Total amount of the order
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the order
     net_amount DECIMAL(10, 2) DEFAULT 0.0, -- Net amount after discount
+    notes TEXT, -- Additional notes for the order
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (customer_id) REFERENCES partner(id) ON DELETE CASCADE
+    FOREIGN KEY (customer_id) REFERENCES partner(id) ON DELETE CASCADE,
+    UNIQUE (customer_id, custome_reference) -- Ensure customer_id and custome_reference are unique
 );
 
 CREATE TABLE sales_order_item (
     id SERIAL PRIMARY KEY,
     sales_order_id INT NOT NULL, -- Sales order ID
     product_variant_id INT NOT NULL, -- Product variant ID
+    variant_details JSONB, -- Variant details in JSON format for name, description, etc.,
     quantity DECIMAL(10, 3) NOT NULL, -- Quantity ordered
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item

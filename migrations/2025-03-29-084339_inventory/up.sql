@@ -35,11 +35,13 @@ CREATE TABLE dispatch_master (
     journal_id INT, -- Journal ID for the dispatch
     dispatch_id INT,
     address_id INT, -- Address ID for the dispatch
+    address_details JSONB, -- Address details in JSON format
     source_location_id INT, -- Source location for the dispatch
     destination_location_id INT, -- Destination location for the dispatch
     status VARCHAR(50) DEFAULT 'Pending', -- e.g., "Pending", "In Transit", "Delivered"
     expected_delivery_date TIMESTAMP, -- Expected delivery date
     actual_delivery_date TIMESTAMP, -- Actual delivery date
+    notes TEXT, -- Additional notes for the dispatch
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (dispatch_type_id) REFERENCES dispatch_type(id) ON DELETE CASCADE,
@@ -54,6 +56,7 @@ CREATE TABLE dispatch_detail (
     id SERIAL PRIMARY KEY,
     dispatch_id INT NOT NULL,
     product_variant_id INT NOT NULL,
+    variant_details JSONB, -- Variant details in JSON format
     quantity DECIMAL(10, 3) NOT NULL, -- Quantity to be dispatched
     status VARCHAR(50) DEFAULT 'Pending', -- e.g., "Pending", "In Transit", "Delivered"
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),

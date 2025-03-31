@@ -64,6 +64,22 @@ diesel::table! {
 }
 
 diesel::table! {
+    bill_item (id) {
+        id -> Int4,
+        bill_id -> Int4,
+        journal_entry_id -> Int4,
+        product_variant_id -> Int4,
+        item_details -> Nullable<Jsonb>,
+        quantity -> Numeric,
+        unit_price -> Numeric,
+        discount -> Nullable<Numeric>,
+        total_price -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     brand (id) {
         id -> Int4,
         #[max_length = 255]
@@ -147,6 +163,39 @@ diesel::table! {
 }
 
 diesel::table! {
+    creditnote (id) {
+        id -> Int4,
+        invoice_id -> Int4,
+        journal_id -> Int4,
+        customer_id -> Int4,
+        #[max_length = 50]
+        creditnote_number -> Varchar,
+        creditnote_date -> Timestamp,
+        total_amount -> Nullable<Numeric>,
+        #[max_length = 50]
+        status -> Nullable<Varchar>,
+        notes -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    creditnote_item (id) {
+        id -> Int4,
+        creditnote_id -> Int4,
+        product_variant_id -> Int4,
+        item_details -> Nullable<Jsonb>,
+        quantity -> Numeric,
+        unit_price -> Numeric,
+        discount -> Nullable<Numeric>,
+        total_price -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     currency (id) {
         id -> Int4,
         #[max_length = 5]
@@ -176,10 +225,44 @@ diesel::table! {
 }
 
 diesel::table! {
+    debitnote (id) {
+        id -> Int4,
+        bill_id -> Int4,
+        journal_id -> Int4,
+        vendor_id -> Int4,
+        #[max_length = 50]
+        debit_note_number -> Varchar,
+        debit_note_date -> Timestamp,
+        total_amount -> Nullable<Numeric>,
+        #[max_length = 50]
+        status -> Nullable<Varchar>,
+        notes -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    debitnote_item (id) {
+        id -> Int4,
+        debitnote_id -> Int4,
+        product_variant_id -> Int4,
+        item_details -> Nullable<Jsonb>,
+        quantity -> Numeric,
+        unit_price -> Numeric,
+        discount -> Nullable<Numeric>,
+        total_price -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     dispatch_detail (id) {
         id -> Int4,
         dispatch_id -> Int4,
         product_variant_id -> Int4,
+        variant_details -> Nullable<Jsonb>,
         quantity -> Numeric,
         #[max_length = 50]
         status -> Nullable<Varchar>,
@@ -198,12 +281,14 @@ diesel::table! {
         journal_id -> Nullable<Int4>,
         dispatch_id -> Nullable<Int4>,
         address_id -> Nullable<Int4>,
+        address_details -> Nullable<Jsonb>,
         source_location_id -> Nullable<Int4>,
         destination_location_id -> Nullable<Int4>,
         #[max_length = 50]
         status -> Nullable<Varchar>,
         expected_delivery_date -> Nullable<Timestamp>,
         actual_delivery_date -> Nullable<Timestamp>,
+        notes -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -290,11 +375,15 @@ diesel::table! {
         order_id -> Int4,
         journal_id -> Int4,
         customer_id -> Int4,
+        custome_details -> Nullable<Jsonb>,
         invoice_date -> Timestamp,
         due_date -> Timestamp,
         total_amount -> Nullable<Numeric>,
         #[max_length = 50]
         status -> Nullable<Varchar>,
+        notes -> Nullable<Text>,
+        #[max_length = 50]
+        payment_status -> Nullable<Varchar>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -306,6 +395,7 @@ diesel::table! {
         invoice_id -> Int4,
         journal_entry_id -> Int4,
         product_variant_id -> Int4,
+        item_details -> Nullable<Jsonb>,
         quantity -> Numeric,
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
@@ -316,17 +406,12 @@ diesel::table! {
 }
 
 diesel::table! {
-    invoice_payment (id) {
+    issued_payment (id) {
         id -> Int4,
-        invoice_id -> Int4,
-        journal_id -> Int4,
-        #[max_length = 50]
-        payment_method -> Nullable<Varchar>,
-        #[max_length = 50]
-        payment_reference -> Varchar,
-        bank_account_id -> Int4,
-        payment_date -> Timestamp,
-        amount -> Numeric,
+        issued_id -> Int4,
+        bill_id -> Nullable<Int4>,
+        creditnote_id -> Nullable<Int4>,
+        notes -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -432,6 +517,48 @@ diesel::table! {
 }
 
 diesel::table! {
+    payment_issued (id) {
+        id -> Int4,
+        vendor_id -> Int4,
+        journal_id -> Int4,
+        #[max_length = 50]
+        payment_method -> Nullable<Varchar>,
+        #[max_length = 50]
+        payment_reference -> Varchar,
+        bank_account_id -> Int4,
+        payment_date -> Timestamp,
+        amount -> Numeric,
+        vendor_bank -> Nullable<Int4>,
+        #[max_length = 50]
+        payment_status -> Nullable<Varchar>,
+        notes -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    payment_receipt (id) {
+        id -> Int4,
+        customer_id -> Int4,
+        journal_id -> Int4,
+        #[max_length = 50]
+        payment_method -> Nullable<Varchar>,
+        #[max_length = 50]
+        payment_reference -> Varchar,
+        bank_account_id -> Int4,
+        payment_date -> Timestamp,
+        amount -> Numeric,
+        customer_bank -> Nullable<Int4>,
+        #[max_length = 50]
+        payment_status -> Nullable<Varchar>,
+        notes -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     price_list (id) {
         id -> Int4,
         #[max_length = 255]
@@ -507,17 +634,45 @@ diesel::table! {
 }
 
 diesel::table! {
+    purchase_bill (id) {
+        id -> Int4,
+        order_id -> Int4,
+        #[max_length = 50]
+        bill_type -> Nullable<Varchar>,
+        #[max_length = 50]
+        bill_number -> Varchar,
+        vendor_id -> Int4,
+        vendor_details -> Nullable<Jsonb>,
+        journal_id -> Int4,
+        bill_date -> Timestamp,
+        due_date -> Timestamp,
+        total_amount -> Nullable<Numeric>,
+        #[max_length = 50]
+        status -> Nullable<Varchar>,
+        notes -> Nullable<Text>,
+        #[max_length = 50]
+        payment_status -> Nullable<Varchar>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     purchase_order (id) {
         id -> Int4,
         #[max_length = 50]
         order_number -> Varchar,
         vendor_id -> Int4,
+        #[max_length = 50]
+        vendor_reference -> Nullable<Varchar>,
+        vendor_details -> Nullable<Jsonb>,
         order_date -> Timestamp,
         #[max_length = 50]
         status -> Nullable<Varchar>,
         total_amount -> Nullable<Numeric>,
         discount -> Nullable<Numeric>,
         net_amount -> Nullable<Numeric>,
+        notes -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -528,10 +683,23 @@ diesel::table! {
         id -> Int4,
         purchase_order_id -> Int4,
         product_variant_id -> Int4,
+        variant_details -> Nullable<Jsonb>,
         quantity -> Numeric,
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    received_payment (id) {
+        id -> Int4,
+        receipt_id -> Int4,
+        invoice_id -> Nullable<Int4>,
+        debitnote_id -> Nullable<Int4>,
+        notes -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -564,12 +732,16 @@ diesel::table! {
         #[max_length = 50]
         order_number -> Varchar,
         customer_id -> Int4,
+        #[max_length = 50]
+        custome_reference -> Nullable<Varchar>,
+        customer_details -> Nullable<Jsonb>,
         order_date -> Timestamp,
         #[max_length = 50]
         status -> Nullable<Varchar>,
         total_amount -> Nullable<Numeric>,
         discount -> Nullable<Numeric>,
         net_amount -> Nullable<Numeric>,
+        notes -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -580,6 +752,7 @@ diesel::table! {
         id -> Int4,
         sales_order_id -> Int4,
         product_variant_id -> Int4,
+        variant_details -> Nullable<Jsonb>,
         quantity -> Numeric,
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
@@ -743,11 +916,24 @@ diesel::joinable!(bank_accounts -> banks (bank_id));
 diesel::joinable!(bank_accounts -> entities (owner_id));
 diesel::joinable!(bank_accounts -> partner (owner_id));
 diesel::joinable!(banks -> country (country_id));
+diesel::joinable!(bill_item -> journal_entry (journal_entry_id));
+diesel::joinable!(bill_item -> product_variant (product_variant_id));
+diesel::joinable!(bill_item -> purchase_bill (bill_id));
 diesel::joinable!(city -> state (state_id));
 diesel::joinable!(coa -> coa_template (account_id));
 diesel::joinable!(coa -> financial_year (financial_year_id));
 diesel::joinable!(coa_template -> coa_template_master (template_id));
+diesel::joinable!(creditnote -> invoice (invoice_id));
+diesel::joinable!(creditnote -> journals (journal_id));
+diesel::joinable!(creditnote -> partner (customer_id));
+diesel::joinable!(creditnote_item -> creditnote (creditnote_id));
+diesel::joinable!(creditnote_item -> product_variant (product_variant_id));
 diesel::joinable!(customer_category -> price_list (price_list_id));
+diesel::joinable!(debitnote -> journals (journal_id));
+diesel::joinable!(debitnote -> partner (vendor_id));
+diesel::joinable!(debitnote -> purchase_bill (bill_id));
+diesel::joinable!(debitnote_item -> debitnote (debitnote_id));
+diesel::joinable!(debitnote_item -> product_variant (product_variant_id));
 diesel::joinable!(dispatch_detail -> dispatch_master (dispatch_id));
 diesel::joinable!(dispatch_detail -> product_variant (product_variant_id));
 diesel::joinable!(dispatch_master -> address (address_id));
@@ -764,9 +950,9 @@ diesel::joinable!(invoice -> sales_order (order_id));
 diesel::joinable!(invoice_item -> invoice (invoice_id));
 diesel::joinable!(invoice_item -> journal_entry (journal_entry_id));
 diesel::joinable!(invoice_item -> product_variant (product_variant_id));
-diesel::joinable!(invoice_payment -> bank_accounts (bank_account_id));
-diesel::joinable!(invoice_payment -> invoice (invoice_id));
-diesel::joinable!(invoice_payment -> journals (journal_id));
+diesel::joinable!(issued_payment -> creditnote (creditnote_id));
+diesel::joinable!(issued_payment -> payment_receipt (issued_id));
+diesel::joinable!(issued_payment -> purchase_bill (bill_id));
 diesel::joinable!(journal_entry -> coa (ledger_id));
 diesel::joinable!(journal_entry -> journals (journal_id));
 diesel::joinable!(journal_entry -> partner (partner_id));
@@ -777,6 +963,10 @@ diesel::joinable!(order_delivery -> dispatch_detail (dispatch_detail_id));
 diesel::joinable!(order_delivery -> sales_order_item (sales_order_item_id));
 diesel::joinable!(order_receipt -> dispatch_detail (dispatch_detail_id));
 diesel::joinable!(order_receipt -> purchase_order_item (purchase_order_item_id));
+diesel::joinable!(payment_issued -> journals (journal_id));
+diesel::joinable!(payment_issued -> partner (vendor_id));
+diesel::joinable!(payment_receipt -> journals (journal_id));
+diesel::joinable!(payment_receipt -> partner (customer_id));
 diesel::joinable!(price_list_item -> price_list (price_list_id));
 diesel::joinable!(price_list_item -> product_variant (product_variant_id));
 diesel::joinable!(product -> product_category (category_id));
@@ -784,9 +974,15 @@ diesel::joinable!(product -> uom (uom_id));
 diesel::joinable!(product_variant -> brand (brand_id));
 diesel::joinable!(product_variant -> product (product_id));
 diesel::joinable!(product_variant -> uom (uom_id));
+diesel::joinable!(purchase_bill -> journals (journal_id));
+diesel::joinable!(purchase_bill -> partner (vendor_id));
+diesel::joinable!(purchase_bill -> purchase_order (order_id));
 diesel::joinable!(purchase_order -> partner (vendor_id));
 diesel::joinable!(purchase_order_item -> product_variant (product_variant_id));
 diesel::joinable!(purchase_order_item -> purchase_order (purchase_order_id));
+diesel::joinable!(received_payment -> debitnote (debitnote_id));
+diesel::joinable!(received_payment -> invoice (invoice_id));
+diesel::joinable!(received_payment -> payment_receipt (receipt_id));
 diesel::joinable!(reconciliation -> journal_entry (journal_entry_id));
 diesel::joinable!(sales_order -> partner (customer_id));
 diesel::joinable!(sales_order_item -> product_variant (product_variant_id));
@@ -811,14 +1007,19 @@ diesel::allow_tables_to_appear_in_same_query!(
     address_type,
     bank_accounts,
     banks,
+    bill_item,
     brand,
     city,
     coa,
     coa_template,
     coa_template_master,
     country,
+    creditnote,
+    creditnote_item,
     currency,
     customer_category,
+    debitnote,
+    debitnote_item,
     dispatch_detail,
     dispatch_master,
     dispatch_type,
@@ -828,7 +1029,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     inventory,
     invoice,
     invoice_item,
-    invoice_payment,
+    issued_payment,
     journal_entry,
     journal_type,
     journals,
@@ -836,13 +1037,17 @@ diesel::allow_tables_to_appear_in_same_query!(
     order_delivery,
     order_receipt,
     partner,
+    payment_issued,
+    payment_receipt,
     price_list,
     price_list_item,
     product,
     product_category,
     product_variant,
+    purchase_bill,
     purchase_order,
     purchase_order_item,
+    received_payment,
     reconciliation,
     roles,
     sales_order,

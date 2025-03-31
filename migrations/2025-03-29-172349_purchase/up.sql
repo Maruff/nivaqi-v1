@@ -41,11 +41,14 @@ CREATE TABLE purchase_order (
     id SERIAL PRIMARY KEY,
     order_number VARCHAR(50) UNIQUE NOT NULL, -- Unique identifier for the purchase order
     vendor_id INT NOT NULL, -- Vendor ID for the purchase order
+    vendor_reference VARCHAR(50), -- Vendor reference number like quotation number, contract number, price list number, etc.,
+    vendor_details JSONB, -- Vendor details in JSON format
     order_date TIMESTAMP NOT NULL DEFAULT NOW(), -- Date of the order
-    status VARCHAR(50) CHECK (status IN ('Draft','Enquiry', 'Quotation', 'Order', 'Shipped', 'Received')) DEFAULT 'Draft',
+    status VARCHAR(50) CHECK (status IN ('Draft','Enquiry', 'Quotation', 'Order', 'Shipped', 'Received', 'Cancelled')) DEFAULT 'Draft',
     total_amount DECIMAL(10, 2) DEFAULT 0.0, -- Total amount of the order
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the order
     net_amount DECIMAL(10, 2) DEFAULT 0.0, -- Net amount after discount
+    notes TEXT, -- Additional notes for the order
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (vendor_id) REFERENCES partner(id) ON DELETE CASCADE
@@ -55,6 +58,7 @@ CREATE TABLE purchase_order_item (
     id SERIAL PRIMARY KEY,
     purchase_order_id INT NOT NULL, -- Purchase order ID
     product_variant_id INT NOT NULL, -- Product variant ID
+    variant_details JSONB, -- Variant details in JSON format
     quantity DECIMAL(10, 3) NOT NULL, -- Quantity ordered
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item
