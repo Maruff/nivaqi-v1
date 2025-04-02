@@ -3,6 +3,7 @@ CREATE TABLE journal_type (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   description TEXT,
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -17,6 +18,7 @@ CREATE TABLE journals (
   Journal_date DATE NOT NULL,
   total DECIMAL(15, 2) DEFAULT 0.00,
   status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Post')) DEFAULT 'Draft',
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),  
   FOREIGN KEY (journal_type_id) REFERENCES journal_type(id) ON DELETE CASCADE,
@@ -34,6 +36,7 @@ CREATE TABLE journal_entry (
   credit DECIMAL(15, 2) DEFAULT 0.00,
   currency_code VARCHAR(10) DEFAULT 'INR',
   reconciliation_date DATE DEFAULT NULL,
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (journal_id) REFERENCES journals(id),
@@ -46,6 +49,7 @@ CREATE TABLE reconciliation (
     journal_entry_id INT NOT NULL,
     reconciliation_date DATE NOT NULL,
     reconciled BOOLEAN NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id)

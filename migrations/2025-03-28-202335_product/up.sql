@@ -5,6 +5,7 @@ CREATE TABLE uom (
     symbol VARCHAR(10),
     conversion_factor DECIMAL(10, 4) DEFAULT 1.0,
     base_unit BOOLEAN DEFAULT FALSE,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -13,6 +14,7 @@ CREATE TABLE product_category (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     parent_id INT,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (parent_id) REFERENCES product_category(id) ON DELETE SET NULL
@@ -23,6 +25,7 @@ CREATE TABLE product (
     name VARCHAR(255) NOT NULL,
     category_id INT,
     uom_id INT,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (category_id) REFERENCES product_category(id) ON DELETE SET NULL,
@@ -33,6 +36,7 @@ CREATE TABLE brand (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -54,6 +58,7 @@ CREATE TABLE product_variant (
     width DECIMAL(10, 3), -- Width in meters
     height DECIMAL(10, 3), -- Height in meters
     volume DECIMAL(10, 3), -- Shipment Volume in liters
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,

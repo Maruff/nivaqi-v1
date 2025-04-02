@@ -11,6 +11,7 @@ CREATE TABLE partner (
   payable_id INT,
   revenue_id INT,
   expense_id INT,
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (receivable_id) REFERENCES coa(ledger_id),
@@ -22,6 +23,7 @@ CREATE TABLE partner (
 CREATE TABLE address_type (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) UNIQUE NOT NULL,
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -33,6 +35,7 @@ CREATE TABLE address (
   street_address TEXT,
   city INT,
   postal_code VARCHAR(10) NOT NULL,
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (partner_id) REFERENCES partner(id),

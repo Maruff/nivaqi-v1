@@ -5,6 +5,7 @@ CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR UNIQUE NOT NULL,
     description VARCHAR,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -15,6 +16,7 @@ CREATE TABLE users (
     email VARCHAR UNIQUE NOT NULL,
     password VARCHAR NOT NULL,
     role_id INTEGER NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (role_id) REFERENCES roles (id)

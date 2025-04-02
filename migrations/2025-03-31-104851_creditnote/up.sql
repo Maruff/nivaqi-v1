@@ -9,6 +9,7 @@ CREATE TABLE creditnote (
     total_amount DECIMAL(10, 2) DEFAULT 0.0, -- Total amount of the credit note
     status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Approved', 'Paid', 'Cancelled')) DEFAULT 'Draft',
     notes TEXT, -- Additional notes for the credit note
+    active BOOLEAN DEFAULT TRUE, -- Status of the credit note
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (invoice_id) REFERENCES invoice(id) ON DELETE CASCADE,
@@ -25,6 +26,7 @@ CREATE TABLE creditnote_item (
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item
     total_price DECIMAL(10, 2) DEFAULT 0.0, -- Total price for the item (quantity * unit_price - discount)
+    active BOOLEAN DEFAULT TRUE, -- Status of the credit note item
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (creditnote_id) REFERENCES creditnote(id) ON DELETE CASCADE,
@@ -41,6 +43,7 @@ CREATE TABLE debitnote (
     total_amount DECIMAL(10, 2) DEFAULT 0.0, -- Total amount of the debit note
     status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Approved', 'Paid', 'Cancelled')) DEFAULT 'Draft',
     notes TEXT, -- Additional notes for the debit note
+    active BOOLEAN DEFAULT TRUE, -- Status of the debit note
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (bill_id) REFERENCES purchase_bill(id) ON DELETE CASCADE,
@@ -57,6 +60,7 @@ CREATE TABLE debitnote_item (
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item
     total_price DECIMAL(10, 2) DEFAULT 0.0, -- Total price for the item (quantity * unit_price - discount)
+    active BOOLEAN DEFAULT TRUE, -- Status of the debit note item
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (debitnote_id) REFERENCES debitnote(id) ON DELETE CASCADE,
@@ -69,6 +73,7 @@ CREATE TABLE received_payment (
     invoice_id INT, -- Invoice ID for the payment
     debitnote_id INT, -- Credit note ID for the payment
     notes TEXT, -- Additional notes for the payment
+    active BOOLEAN DEFAULT TRUE, -- Status of the payment
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (receipt_id) REFERENCES payment_receipt(id) ON DELETE CASCADE,
@@ -82,6 +87,7 @@ CREATE TABLE issued_payment (
     bill_id INT, -- Bill ID for the payment
     creditnote_id INT, -- Credit note ID for the payment
     notes TEXT, -- Additional notes for the payment
+    active BOOLEAN DEFAULT TRUE, -- Status of the payment
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (Issued_id) REFERENCES payment_receipt(id) ON DELETE CASCADE,

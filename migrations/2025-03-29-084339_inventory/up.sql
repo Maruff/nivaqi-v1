@@ -10,6 +10,8 @@ CREATE TABLE inventory (
     maximum_level DECIMAL(10, 3) DEFAULT 0.0, -- Maximum stock level 
     reorder_quantity DECIMAL(10, 3) DEFAULT 0.0, -- Recommended quantity to reorder
     stock_owner_id INT, -- Owner of the stock (e.g., supplier, customer)
+    active BOOLEAN DEFAULT TRUE,
+    stock_type VARCHAR(50) CHECK (stock_type IN ('Stock', 'Consignment', 'Sample', 'Damaged', 'Lost')) DEFAULT 'Stock', -- Type of stock
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (product_variant_id) REFERENCES product_variant(id) ON DELETE CASCADE,
@@ -22,6 +24,7 @@ CREATE TABLE dispatch_type (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL, -- e.g., "Delivery", "Pickup"
     description TEXT,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -42,6 +45,7 @@ CREATE TABLE dispatch_master (
     expected_delivery_date TIMESTAMP, -- Expected delivery date
     actual_delivery_date TIMESTAMP, -- Actual delivery date
     notes TEXT, -- Additional notes for the dispatch
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (dispatch_type_id) REFERENCES dispatch_type(id) ON DELETE CASCADE,
@@ -59,6 +63,7 @@ CREATE TABLE dispatch_detail (
     variant_details JSONB, -- Variant details in JSON format
     quantity DECIMAL(10, 3) NOT NULL, -- Quantity to be dispatched
     status VARCHAR(50) DEFAULT 'Pending', -- e.g., "Pending", "In Transit", "Delivered"
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (dispatch_id) REFERENCES dispatch_master(id) ON DELETE CASCADE,

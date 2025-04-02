@@ -5,6 +5,7 @@ CREATE TABLE coa_template_master (
     description TEXT,
     industry_type VARCHAR(50) CHECK (industry_type IN ('Manufacturing', 'Trading', 'Service', 'Non-Profit')),
     country_code VARCHAR(10) DEFAULT 'IN',
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -17,6 +18,7 @@ CREATE TABLE coa_template (
     account_type VARCHAR(50) CHECK (account_type IN ('Asset', 'Liability', 'Equity', 'Revenue', 'Expense')),
     parent_account_id INT,
     is_posting BOOLEAN NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (template_id) REFERENCES coa_template_master(template_id),
@@ -31,6 +33,7 @@ CREATE TABLE currency (
   symbol VARCHAR(5)  NOT NULL,
   rounding_factor DECIMAL(15, 6) NOT NULL,
   decimal_places INT, 
+  active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -46,6 +49,7 @@ CREATE TABLE entities (
     address TEXT,
     city_id INT,
     currency_code VARCHAR(10) DEFAULT 'INR',
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (parent_id) REFERENCES entities(id),
@@ -60,6 +64,7 @@ CREATE TABLE financial_year (
     entity_id INT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES entities(id),
@@ -71,6 +76,8 @@ CREATE TABLE coa (
     financial_year_id INT NOT NULL,
     account_id INT NOT NULL,
     account_code VARCHAR(50) NOT NULL,
+    account_name VARCHAR(255) NOT NULL,
+    description TEXT,
     currency_code VARCHAR(10) DEFAULT 'INR',
     status TEXT CHECK (status IN ('Active', 'Inactive')) DEFAULT 'Active',
     opening_balance DECIMAL(15, 2) DEFAULT 0.00,

@@ -5,7 +5,7 @@ CREATE TABLE price_list (
     name VARCHAR(255) NOT NULL, -- Name of the price list
     description TEXT, -- Description of the price list
     currency VARCHAR(10) NOT NULL, -- Currency for the price list
-    status boolean DEFAULT true, -- Status of the price list
+    active boolean DEFAULT true, -- Status of the price list
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -16,6 +16,7 @@ CREATE TABLE price_list_item (
     product_variant_id INT NOT NULL, -- Product variant ID
     price DECIMAL(10, 2) NOT NULL, -- Price for the product variant in the price list
     moq DECIMAL(10,3), -- Minimum order quantity
+    active BOOLEAN DEFAULT TRUE, -- Status of the price list item
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (price_list_id) REFERENCES price_list(id) ON DELETE CASCADE,
@@ -28,6 +29,7 @@ CREATE TABLE customer_category (
     description TEXT, -- Description of the customer category
     discount_rate DECIMAL(5, 2) DEFAULT 0.0, -- Discount rate for the category
     price_list_id INT, -- Price list ID for the category
+    active BOOLEAN DEFAULT TRUE, -- Status of the customer category
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (price_list_id) REFERENCES price_list(id) ON DELETE SET NULL
@@ -45,6 +47,7 @@ CREATE TABLE sales_order (
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the order
     net_amount DECIMAL(10, 2) DEFAULT 0.0, -- Net amount after discount
     notes TEXT, -- Additional notes for the order
+    active BOOLEAN DEFAULT TRUE, -- Status of the order
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (customer_id) REFERENCES partner(id) ON DELETE CASCADE,
@@ -60,6 +63,7 @@ CREATE TABLE sales_order_item (
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item
     total_price DECIMAL(10, 2) DEFAULT 0.0, -- Total price for the item (quantity * unit_price - discount)
+    active BOOLEAN DEFAULT TRUE, -- Status of the order item
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (sales_order_id) REFERENCES sales_order(id) ON DELETE CASCADE,
@@ -70,6 +74,7 @@ CREATE TABLE order_delivery (
     id SERIAL PRIMARY KEY,
     sales_order_item_id INT NOT NULL, -- Sales order item ID
     dispatch_detail_id INT NOT NULL, -- Dispatch detail ID
+    active BOOLEAN DEFAULT TRUE, -- Status of the delivery
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (sales_order_item_id) REFERENCES sales_order_item(id) ON DELETE CASCADE,

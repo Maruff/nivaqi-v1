@@ -9,6 +9,7 @@ CREATE TABLE banks (
     phone_number VARCHAR(15),
     email VARCHAR(100),
     website VARCHAR(100),
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (country_id) REFERENCES country(id)
@@ -23,6 +24,7 @@ CREATE TABLE bank_accounts (
     currency VARCHAR(10) DEFAULT 'USD',
     owner_type VARCHAR(10) CHECK (owner_type IN ('Entity', 'Partner')),
     owner_id INT NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (bank_id) REFERENCES banks(bank_id),
@@ -36,6 +38,7 @@ CREATE TABLE exchange_rate (
     target_currency_id INT NOT NULL,
     rate DECIMAL(15, 6) NOT NULL,
     effective_date DATE NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (base_currency_id) REFERENCES currency(id),

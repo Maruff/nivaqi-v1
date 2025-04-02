@@ -29,6 +29,7 @@ CREATE TABLE invoice_item (
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item
     total_price DECIMAL(10, 2) DEFAULT 0.0, -- Total price for the item (quantity * unit_price - discount)
+    active BOOLEAN DEFAULT TRUE, -- Status of the invoice item
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (invoice_id) REFERENCES invoice(id) ON DELETE CASCADE,
@@ -50,6 +51,7 @@ CREATE TABLE  purchase_bill (
     status VARCHAR(50) CHECK (status IN ('Draft', 'Submit', 'Approved', 'Paid', 'Cancelled')) DEFAULT 'Draft',
     notes TEXT, -- Additional notes for the bill
     payment_status VARCHAR(50) CHECK (payment_status IN ('Unpaid', 'Partially Paid', 'Paid')) DEFAULT 'Unpaid',
+    active BOOLEAN DEFAULT TRUE, -- Status of the bill
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (vendor_id) REFERENCES partner(id) ON DELETE CASCADE,
@@ -68,6 +70,7 @@ CREATE TABLE bill_item (
     unit_price DECIMAL(10, 2) NOT NULL, -- Unit price of the product variant
     discount DECIMAL(5, 2) DEFAULT 0.0, -- Discount on the item
     total_price DECIMAL(10, 2) DEFAULT 0.0, -- Total price for the item (quantity * unit_price - discount)
+    active BOOLEAN DEFAULT TRUE, -- Status of the bill item
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (bill_id) REFERENCES purchase_bill(id) ON DELETE CASCADE,
@@ -87,6 +90,7 @@ CREATE TABLE payment_receipt (
     customer_bank INT, -- Customer bank account ID for the payment
     payment_status VARCHAR(50) CHECK (payment_status IN ('Draft', 'Submit', 'Deposited', 'Received', 'Cancelled')) DEFAULT 'Draft',
     notes TEXT, -- Additional notes for the payment
+    active BOOLEAN DEFAULT TRUE, -- Status of the payment
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (journal_id) REFERENCES journals(id) ON DELETE CASCADE,
@@ -108,6 +112,7 @@ CREATE TABLE payment_issued (
     vendor_bank INT, -- Vendor bank account ID for the payment
     payment_status VARCHAR(50) CHECK (payment_status IN ('Draft', 'Submit', 'Issued', 'Deposited', 'Cancelled')) DEFAULT 'Draft',
     notes TEXT, -- Additional notes for the payment
+    active BOOLEAN DEFAULT TRUE, -- Status of the payment
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (journal_id) REFERENCES journals(id) ON DELETE CASCADE,
