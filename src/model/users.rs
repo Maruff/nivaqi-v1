@@ -12,6 +12,7 @@ pub struct User {
     pub email: String,
     pub password: String,
     pub role_id: i32,
+    pub active: bool,
     // pub created_at: chrono::NaiveDateTime,
     // pub updated_at: chrono::NaiveDateTime,
 }
@@ -34,4 +35,5 @@ pub struct UpdateUser<'a> {
     pub email: Option<&'a str>,
     pub password: Option<&'a str>,
     pub role_id: Option<i32>,
+    pub active: Option<bool>,
 }

@@ -10,6 +10,7 @@ pub struct Role {
     pub id: i32,
     pub name: String,
     pub description: Option<String>,
+    pub active: bool,
 }
 
 // Struct for creating a new role
@@ -26,4 +27,5 @@ pub struct NewRole<'a> {
 pub struct UpdateRole<'a> {
     pub name: Option<&'a str>,
     pub description: Option<&'a str>,
+    pub active: Option<bool>,
 }
