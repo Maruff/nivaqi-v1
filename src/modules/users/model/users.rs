@@ -31,7 +31,7 @@ pub struct NewUser {
 }
 
 // Struct for updating an existing user
-#[derive(Debug, Serialize, Deserialize, AsChangeset)]
+#[derive(Debug, Queryable, Serialize, Deserialize, AsChangeset)]
 #[diesel(table_name = crate::schema::users)]
 pub struct UpdateUser {
     pub username: Option<String>,
@@ -40,11 +40,3 @@ pub struct UpdateUser {
     pub role_id: Option<i32>,
     pub active: Option<bool>,
 }
-// pub struct UpdateUser<'a> {
-//     pub username: Option<&'a str>,
-//     pub email: Option<&'a str>,
-//     pub password: Option<&'a str>,
-//     pub role_id: Option<i32>,
-//     pub active: Option<bool>,
-// }
-
