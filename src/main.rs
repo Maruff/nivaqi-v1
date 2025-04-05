@@ -8,7 +8,7 @@ mod modules; // Declare the `modules` folder
 
 use actix_web::{web, App, HttpServer};
 use modules::base::handlers::user_handlers::get_users; // Import the get_users handler
-use modules::base::services::user_services::get_users_service; // Import the user service (optional)
+use modules::base::handlers::user_handlers::create_user; // Import the create_user handler
 
 
 // use serde::{Deserialize, Serialize};
@@ -19,6 +19,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .route("/users", web::get().to(get_users))
+            .route("/create_user", web::post().to(create_user))
             // .route("/users/{id}", web::get().to(get_user))
             // .route("/users", web::post().to(create_user))
             // .route("/users/{id}", web::put().to(update_user))

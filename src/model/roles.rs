@@ -1,7 +1,7 @@
 // src/model/roles.rs
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use crate::schema::roles;
+// use crate::schema::roles;
 
 // Struct for the `roles` table
 #[derive(Debug, Queryable, Serialize, Deserialize)]

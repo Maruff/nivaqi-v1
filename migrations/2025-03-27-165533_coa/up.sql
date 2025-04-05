@@ -76,7 +76,7 @@ CREATE TABLE coa (
     financial_year_id INT NOT NULL,
     account_id INT NOT NULL,
     account_code VARCHAR(50) NOT NULL,
-    account_name VARCHAR(255) NOT NULL,
+    account_name VARCHAR(255),
     description TEXT,
     currency_code VARCHAR(10) DEFAULT 'INR',
     status TEXT CHECK (status IN ('Active', 'Inactive')) DEFAULT 'Active',

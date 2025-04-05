@@ -9,6 +9,7 @@ diesel::table! {
         city -> Nullable<Int4>,
         #[max_length = 10]
         postal_code -> Varchar,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -19,6 +20,7 @@ diesel::table! {
         id -> Int4,
         #[max_length = 100]
         name -> Varchar,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -38,6 +40,7 @@ diesel::table! {
         #[max_length = 10]
         owner_type -> Nullable<Varchar>,
         owner_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -58,6 +61,7 @@ diesel::table! {
         email -> Nullable<Varchar>,
         #[max_length = 100]
         website -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -74,6 +78,7 @@ diesel::table! {
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -85,6 +90,7 @@ diesel::table! {
         #[max_length = 255]
         name -> Varchar,
         description -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -96,6 +102,7 @@ diesel::table! {
         #[max_length = 100]
         name -> Varchar,
         state_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -108,6 +115,9 @@ diesel::table! {
         account_id -> Int4,
         #[max_length = 50]
         account_code -> Varchar,
+        #[max_length = 255]
+        account_name -> Nullable<Varchar>,
+        description -> Nullable<Text>,
         #[max_length = 10]
         currency_code -> Nullable<Varchar>,
         status -> Nullable<Text>,
@@ -130,6 +140,7 @@ diesel::table! {
         account_type -> Nullable<Varchar>,
         parent_account_id -> Nullable<Int4>,
         is_posting -> Bool,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -145,6 +156,7 @@ diesel::table! {
         industry_type -> Nullable<Varchar>,
         #[max_length = 10]
         country_code -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -157,6 +169,7 @@ diesel::table! {
         name -> Varchar,
         #[max_length = 10]
         code -> Varchar,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -175,6 +188,7 @@ diesel::table! {
         #[max_length = 50]
         status -> Nullable<Varchar>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -190,6 +204,7 @@ diesel::table! {
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -206,6 +221,7 @@ diesel::table! {
         symbol -> Varchar,
         rounding_factor -> Numeric,
         decimal_places -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -219,6 +235,7 @@ diesel::table! {
         description -> Nullable<Text>,
         discount_rate -> Nullable<Numeric>,
         price_list_id -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -237,6 +254,7 @@ diesel::table! {
         #[max_length = 50]
         status -> Nullable<Varchar>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -252,6 +270,7 @@ diesel::table! {
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -266,6 +285,7 @@ diesel::table! {
         quantity -> Numeric,
         #[max_length = 50]
         status -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -289,6 +309,7 @@ diesel::table! {
         expected_delivery_date -> Nullable<Timestamp>,
         actual_delivery_date -> Nullable<Timestamp>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -300,6 +321,7 @@ diesel::table! {
         #[max_length = 50]
         name -> Varchar,
         description -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -320,6 +342,7 @@ diesel::table! {
         city_id -> Nullable<Int4>,
         #[max_length = 10]
         currency_code -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -332,6 +355,7 @@ diesel::table! {
         target_currency_id -> Int4,
         rate -> Numeric,
         effective_date -> Date,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -345,6 +369,7 @@ diesel::table! {
         entity_id -> Int4,
         start_date -> Date,
         end_date -> Date,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -362,6 +387,9 @@ diesel::table! {
         maximum_level -> Nullable<Numeric>,
         reorder_quantity -> Nullable<Numeric>,
         stock_owner_id -> Nullable<Int4>,
+        active -> Nullable<Bool>,
+        #[max_length = 50]
+        stock_type -> Nullable<Varchar>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -400,6 +428,7 @@ diesel::table! {
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -412,6 +441,7 @@ diesel::table! {
         bill_id -> Nullable<Int4>,
         creditnote_id -> Nullable<Int4>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -429,6 +459,7 @@ diesel::table! {
         #[max_length = 10]
         currency_code -> Nullable<Varchar>,
         reconciliation_date -> Nullable<Date>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -440,6 +471,7 @@ diesel::table! {
         #[max_length = 100]
         name -> Varchar,
         description -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -459,6 +491,7 @@ diesel::table! {
         total -> Nullable<Numeric>,
         #[max_length = 50]
         status -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -471,6 +504,7 @@ diesel::table! {
         code -> Varchar,
         warehouse_id -> Int4,
         description -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -481,6 +515,7 @@ diesel::table! {
         id -> Int4,
         sales_order_item_id -> Int4,
         dispatch_detail_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -491,6 +526,7 @@ diesel::table! {
         id -> Int4,
         purchase_order_item_id -> Int4,
         dispatch_detail_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -511,6 +547,7 @@ diesel::table! {
         payable_id -> Nullable<Int4>,
         revenue_id -> Nullable<Int4>,
         expense_id -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -532,6 +569,7 @@ diesel::table! {
         #[max_length = 50]
         payment_status -> Nullable<Varchar>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -553,6 +591,7 @@ diesel::table! {
         #[max_length = 50]
         payment_status -> Nullable<Varchar>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -566,7 +605,7 @@ diesel::table! {
         description -> Nullable<Text>,
         #[max_length = 10]
         currency -> Varchar,
-        status -> Nullable<Bool>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -579,6 +618,7 @@ diesel::table! {
         product_variant_id -> Int4,
         price -> Numeric,
         moq -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -591,6 +631,7 @@ diesel::table! {
         name -> Varchar,
         category_id -> Nullable<Int4>,
         uom_id -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -602,6 +643,7 @@ diesel::table! {
         #[max_length = 255]
         name -> Varchar,
         parent_id -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -628,6 +670,7 @@ diesel::table! {
         width -> Nullable<Numeric>,
         height -> Nullable<Numeric>,
         volume -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -652,6 +695,7 @@ diesel::table! {
         notes -> Nullable<Text>,
         #[max_length = 50]
         payment_status -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -673,6 +717,7 @@ diesel::table! {
         discount -> Nullable<Numeric>,
         net_amount -> Nullable<Numeric>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -688,6 +733,7 @@ diesel::table! {
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -700,6 +746,7 @@ diesel::table! {
         invoice_id -> Nullable<Int4>,
         debitnote_id -> Nullable<Int4>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -711,6 +758,7 @@ diesel::table! {
         journal_entry_id -> Int4,
         reconciliation_date -> Date,
         reconciled -> Bool,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -721,6 +769,7 @@ diesel::table! {
         id -> Int4,
         name -> Varchar,
         description -> Nullable<Varchar>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -742,6 +791,7 @@ diesel::table! {
         discount -> Nullable<Numeric>,
         net_amount -> Nullable<Numeric>,
         notes -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -757,6 +807,7 @@ diesel::table! {
         unit_price -> Numeric,
         discount -> Nullable<Numeric>,
         total_price -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -770,6 +821,7 @@ diesel::table! {
         #[max_length = 10]
         code -> Varchar,
         country_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -782,6 +834,7 @@ diesel::table! {
         name -> Varchar,
         description -> Nullable<Text>,
         account_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -794,6 +847,7 @@ diesel::table! {
         tax_rate_id -> Int4,
         effective_from -> Date,
         effective_to -> Nullable<Date>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -806,6 +860,7 @@ diesel::table! {
         #[max_length = 50]
         code -> Varchar,
         description -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -822,6 +877,7 @@ diesel::table! {
         effective_to -> Nullable<Date>,
         account_id -> Nullable<Int4>,
         description -> Nullable<Text>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -836,6 +892,7 @@ diesel::table! {
         symbol -> Nullable<Varchar>,
         conversion_factor -> Nullable<Numeric>,
         base_unit -> Nullable<Bool>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -848,6 +905,7 @@ diesel::table! {
         email -> Varchar,
         password -> Varchar,
         role_id -> Int4,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -862,6 +920,7 @@ diesel::table! {
         discount_rate -> Nullable<Numeric>,
         credit_limit -> Nullable<Numeric>,
         credit_period -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -876,7 +935,7 @@ diesel::table! {
         #[max_length = 10]
         currency -> Varchar,
         vendor_id -> Int4,
-        status -> Nullable<Bool>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -890,6 +949,7 @@ diesel::table! {
         price -> Numeric,
         discount_rate -> Nullable<Numeric>,
         moq -> Nullable<Numeric>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -904,6 +964,7 @@ diesel::table! {
         location -> Nullable<Text>,
         city_id -> Nullable<Int4>,
         manager_id -> Nullable<Int4>,
+        active -> Nullable<Bool>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
