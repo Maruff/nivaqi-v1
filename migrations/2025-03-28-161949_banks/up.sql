@@ -91,7 +91,6 @@ VALUES
     ('Banque Misr', 'BM', 'Cairo, Egypt', 51, '+20-2-19888', 'info@banquemisr.com', 'https://www.banquemisr.com'),
     ('National Bank of Egypt', 'NBE', 'Cairo, Egypt', 51, '+20-2-19623', 'info@nbe.com.eg', 'https://www.nbe.com.eg'),
     -- ('Bank of Palestine', 'BOP', 'Ramallah, Palestine', 7, '+970-2-2942000', 'info@bankofpalestine.com', 'https://www.bankofpalestine.com'),
-    ('Arab Bank', 'ARAB', 'Amman, Jordan', 85, '+962-6-4600900', 'info@arabbank.com', 'https://www.arabbank.com'),
     ('Kuwait Finance House', 'KFH', 'Kuwait City, Kuwait', 89, '+965-1803333', 'info@kfh.com', 'https://www.kfh.com'),
     -- ('Quds Bank', 'QUDS', 'Ramallah, Palestine', 7, '+970-2-2972000', 'info@qudsbank.ps', 'https://www.qudsbank.ps'),
     ('Bank Audi', 'AUDI', 'Beirut, Lebanon', 93, '+961-1-977477', 'info@bankaudi.com', 'https://www.bankaudi.com'),
